@@ -6,7 +6,7 @@ failures in the Next.js frontend.
 """
 from typing import List, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
 
 
 # --- /extract --------------------------------------------------------
@@ -17,9 +17,9 @@ class ExtractRequest(BaseModel):
     The request field has a length constraint that gates 422 on empty
     or oversized input.
     """
-    model_config = ConfigDict(str_strip_whitespace=False)
-
-    text: str = Field(..., min_length=1, max_length=5000)
+    # TODO: declare the request body field with a Field(...) length
+    #       constraint.
+    pass
 
 
 class Entity(BaseModel):
@@ -28,10 +28,9 @@ class Entity(BaseModel):
     Field names must match the corresponding TypeScript Entity
     interface in `web/lib/types.ts` exactly.
     """
-    text: str
-    label: str
-    start: int
-    end: int
+    # TODO: declare the span's text, label, and start/end character
+    #       offsets.
+    pass
 
 
 class ExtractResponse(BaseModel):
@@ -40,7 +39,8 @@ class ExtractResponse(BaseModel):
     Per the Evaluation Methodology, the returned list is ordered by
     start offset ascending.
     """
-    entities: List[Entity]
+    # TODO: declare the field that carries the ordered list of entities.
+    pass
 
 
 # --- /kg/query -------------------------------------------------------
@@ -50,16 +50,16 @@ class KGRequest(BaseModel):
 
     The question field has a length constraint.
     """
-    model_config = ConfigDict(str_strip_whitespace=False)
-
-    question: str = Field(..., min_length=1, max_length=500)
+    # TODO: declare the request field with a Field(...) length
+    #       constraint.
+    pass
 
 
 class KGResponse(BaseModel):
     """Response body for POST /kg/query."""
-    cypher: str
-    rows: List[dict]
-    count: int
+    # TODO: declare the cypher string, the rows the driver returned,
+    #       and the row count.
+    pass
 
 
 class UnsupportedQueryDetail(BaseModel):
@@ -76,10 +76,9 @@ class RAGRequest(BaseModel):
     The question field has a length constraint; `k` is a bounded
     integer with a default.
     """
-    model_config = ConfigDict(str_strip_whitespace=False)
-
-    question: str = Field(..., min_length=1, max_length=500)
-    k: int = Field(default=4, ge=1, le=10)
+    # TODO: declare the question field with a Field(...) length
+    #       constraint and a bounded integer `k` with a default.
+    pass
 
 
 class Citation(BaseModel):
@@ -87,8 +86,8 @@ class Citation(BaseModel):
 
     Field names must match the TypeScript Citation interface.
     """
-    chunk_id: int
-    score: float
+    # TODO: declare the citation's chunk identifier and retrieval score.
+    pass
 
 
 class RAGResponse(BaseModel):
@@ -97,16 +96,17 @@ class RAGResponse(BaseModel):
     Grounding contract: when `answer` is not the empty-retrieval
     sentinel, `len(citations) > 0` is required.
     """
-    answer: str
-    citations: List[Citation]
-    confidence: float
+    # TODO: declare the answer string, the list of citations, and the
+    #       confidence score.
+    pass
 
 
 # --- Health / readiness ---------------------------------------------
 
 class HealthResponse(BaseModel):
     """Liveness response."""
-    status: str
+    # TODO: declare the single field returned by /healthz.
+    pass
 
 
 class ReadyDetail(BaseModel):
